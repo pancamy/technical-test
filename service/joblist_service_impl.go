@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"yt-users-service/exception"
@@ -21,10 +22,6 @@ func (service *JobListServiceImpl) FindById(ctx context.Context, jobListId strin
 	response, err := http.Get("http://dev3.dansmultipro.co.id/api/recruitment/positions/" + jobListId)
 	helper.PanicError(err)
 
-	if response.Body == nil {
-		panic(exception.NewNotFoundError(err.Error()))
-	}
-
 	responseData, err := ioutil.ReadAll(response.Body)
 	helper.PanicError(err)
 	responses := string(responseData)
@@ -34,6 +31,11 @@ func (service *JobListServiceImpl) FindById(ctx context.Context, jobListId strin
 
 	err = json.Unmarshal(jsonWebResponse, &jobLisResponse)
 	helper.PanicError(err)
+
+	if jobLisResponse.Id == "" {
+		err = errors.New("data not found")
+		panic(exception.NewNotFoundError(err.Error()))
+	}
 
 	return jobLisResponse
 }
