@@ -6,5 +6,6 @@ import (
 )
 
 type JobListService interface {
-	FindAll(ctx context.Context) []web.JobListResponse
+	FindById(ctx context.Context, jobListId string) web.JobListResponse
+	FindAll(ctx context.Context, request web.JobListCreateRequest) []web.JobListResponse
 }

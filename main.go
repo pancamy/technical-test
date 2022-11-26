@@ -56,6 +56,7 @@ func main() {
 	router.GET("/api/v1/user", userController.FindAll)
 
 	// [JOBLIST]
+	router.GET("/api/v1/joblist-detail/:jobListId", jobListController.FindById)
 	router.GET("/api/v1/joblist", jobListController.FindAll)
 
 	router.PanicHandler = exception.ErrorHandler
